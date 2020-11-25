@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="com.github.jsonj:jsonj:0.7" type="repository">
+    <properties maven-id="com.github.jsonj:jsonj:0.7" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/jsonj/jsonj/0.7/jsonj-0.7.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/json-simple/json-simple/1.1/json-simple-1.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/commons-lang/commons-lang/2.6/commons-lang-2.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
