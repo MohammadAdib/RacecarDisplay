@@ -12,11 +12,12 @@ import static mohammad.adib.racecar.util.Utils.sleep;
 
 public class CalibrationPanel extends JLayeredPane implements DataListener {
 
-    private final String[] GEARS = new String[]{"R", "1", "2", "3", "4", "5"};
-    private final CalibrationListener listener;
-    private JLabel gearLabel, debugLabel;
+    private final static int DELAY = 4000;
+    private final static String[] GEARS = new String[]{"R", "1", "2", "3", "4", "5"};
     private final DataMonitor dataMonitor = DataMonitor.getInstance();
     private final Calibration calibration = new Calibration(30);
+    private final CalibrationListener listener;
+    private JLabel gearLabel, selectLabel, debugLabel;
 
     public CalibrationPanel(CalibrationListener listener) {
         this.listener = listener;
@@ -30,7 +31,7 @@ public class CalibrationPanel extends JLayeredPane implements DataListener {
     }
 
     private void setupGearDisplay() {
-        JLabel selectLabel = new JLabel();
+        selectLabel = new JLabel();
         selectLabel.setForeground(Color.RED);
         selectLabel.setText("SELECT AND HOLD");
         selectLabel.setVerticalAlignment(JLabel.CENTER);
@@ -62,9 +63,27 @@ public class CalibrationPanel extends JLayeredPane implements DataListener {
             System.out.println("Starting calibration");
             for (String gear : GEARS) {
                 gearLabel.setText(gear);
-                sleep(3000);
+                sleep(DELAY);
                 recordGearData(gear);
             }
+            recordSensitivity();
+        }).start();
+    }
+
+    private void recordSensitivity() {
+        gearLabel.setVisible(false);
+        selectLabel.setText("Select sensitivity");
+
+        JSlider slider = new JSlider();
+        slider.setMaximum(60);
+        slider.setValue(30);
+        slider.setBounds(40, Utils.HEIGHT / 2 - 30, Utils.WIDTH - 80, 30);
+        slider.setBackground(Color.WHITE);
+        add(slider, 3);
+
+        new Thread(() -> {
+            sleep(DELAY);
+            calibration.margin = slider.getValue();
             saveCalibration();
         }).start();
     }
