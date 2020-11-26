@@ -7,6 +7,8 @@ import mohammad.adib.racecar.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 public class DataPanel extends JLayeredPane {
@@ -71,6 +73,21 @@ public class DataPanel extends JLayeredPane {
         gearLabel.setVerticalAlignment(JLabel.CENTER);
         gearLabel.setHorizontalAlignment(JLabel.CENTER);
         gearLabel.setFont(new Font(gearLabel.getFont().getName(), Font.BOLD, 300));
+        gearLabel.addMouseListener(new MouseAdapter() {
+            long pressedTime;
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                pressedTime = System.currentTimeMillis();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (System.currentTimeMillis() - pressedTime >= 1000) {
+                    startCalibration();
+                }
+            }
+        });
         add(gearLabel, 0);
     }
 
@@ -80,5 +97,4 @@ public class DataPanel extends JLayeredPane {
         debugLabel.setForeground(Color.DARK_GRAY);
         add(debugLabel, 1);
     }
-
 }
