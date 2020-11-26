@@ -25,11 +25,11 @@ public class Main {
                     new BufferedImage(5, 5, BufferedImage.TYPE_INT_ARGB),
                     new Point(0, 0), "invisible"));
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            frame.setUndecorated(true);
             frame.setAlwaysOnTop(true);
         } else {
             frame.setPreferredSize(new Dimension(480,320));
         }
+        frame.setUndecorated(true);
         frame.setContentPane(gui.mainPanel);
         frame.pack();
         frame.dispose();

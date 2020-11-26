@@ -30,7 +30,11 @@ public class Utils {
     }
 
     private static String getPathToCalibration() {
-        return System.getProperty("user.home") + File.separator + "Desktop" + File.separator + CALIBRATION_FILE_NAME;
+        if (isInDevMode()) {
+            return System.getProperty("user.home") + File.separator + "Desktop" + File.separator + CALIBRATION_FILE_NAME;
+        } else {
+            return "/home/pi/" + CALIBRATION_FILE_NAME;
+        }
     }
 
     public static boolean isCalibrated() {

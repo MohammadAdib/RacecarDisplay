@@ -43,6 +43,7 @@ public class DataPanel extends JLayeredPane {
     }
 
     private void startCalibration() {
+        removeAll();
         calibrationPanel = new CalibrationPanel(() -> {
             remove(calibrationPanel);
             init();
@@ -69,10 +70,10 @@ public class DataPanel extends JLayeredPane {
         gearLabel = new JLabel();
         gearLabel.setForeground(Color.RED);
         gearLabel.setText("N");
-        gearLabel.setBounds(0, -25, Utils.WIDTH, Utils.HEIGHT);
+        gearLabel.setBounds(0, 4, Utils.WIDTH, Utils.HEIGHT);
         gearLabel.setVerticalAlignment(JLabel.CENTER);
         gearLabel.setHorizontalAlignment(JLabel.CENTER);
-        gearLabel.setFont(new Font(gearLabel.getFont().getName(), Font.BOLD, 300));
+        gearLabel.setFont(new Font("Dialog", Font.BOLD, 300));
         gearLabel.addMouseListener(new MouseAdapter() {
             long pressedTime;
 

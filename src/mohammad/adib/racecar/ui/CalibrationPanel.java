@@ -36,16 +36,17 @@ public class CalibrationPanel extends JLayeredPane implements DataListener {
         selectLabel.setText("SELECT AND HOLD");
         selectLabel.setVerticalAlignment(JLabel.CENTER);
         selectLabel.setHorizontalAlignment(JLabel.CENTER);
-        selectLabel.setBounds(0, 0, Utils.WIDTH, 72);
+        selectLabel.setBounds(0, 30, Utils.WIDTH, 72);
+        selectLabel.setFont(new Font("Dialog", Font.PLAIN, 20));
         add(selectLabel, 1);
 
 
         gearLabel = new JLabel();
         gearLabel.setForeground(Color.RED);
-        gearLabel.setBounds(0, 40, Utils.WIDTH, Utils.HEIGHT - 100);
+        gearLabel.setBounds(0, 70, Utils.WIDTH, Utils.HEIGHT - 100);
         gearLabel.setVerticalAlignment(JLabel.CENTER);
         gearLabel.setHorizontalAlignment(JLabel.CENTER);
-        gearLabel.setFont(new Font(gearLabel.getFont().getName(), Font.BOLD, 200));
+        gearLabel.setFont(new Font("Dialog", Font.BOLD, 200));
         add(gearLabel, 0);
     }
 
