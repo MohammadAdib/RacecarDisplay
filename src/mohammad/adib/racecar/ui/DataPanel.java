@@ -13,10 +13,13 @@ import java.io.IOException;
 
 public class DataPanel extends JLayeredPane {
 
+    private static final String NEUTRAL = "N";
     private CalibrationPanel calibrationPanel;
-    private JLabel gearLabel, debugLabel;
+    private JLabel gearLabel, metricsLabel, debugLabel;
     private final DataMonitor dataMonitor = DataMonitor.getInstance();
     private Calibration calibration;
+    private String currentGear = NEUTRAL;
+    private long shiftStart = 0;
 
     public DataPanel() {
         if (!Utils.isCalibrated()) {
@@ -29,6 +32,7 @@ public class DataPanel extends JLayeredPane {
     private void init() {
         loadCalibration();
         setupGearDisplay();
+        setupMetricsDisplay();
         setupDebugValues();
         listenForData();
     }
@@ -57,20 +61,41 @@ public class DataPanel extends JLayeredPane {
             boolean inGear = false;
             for (GearInfo gear : calibration.gears) {
                 if (Utils.isGearSelected(gear, x, y, calibration.margin)) {
-                    gearLabel.setText(gear.name);
+                    setGear(gear.name);
                     inGear = true;
                     break;
                 }
             }
-            if (!inGear) gearLabel.setText("N");
+            if (!inGear) setGear(NEUTRAL);
         });
+    }
+
+    private void setGear(String gear) {
+        if (!gear.equals(currentGear)) {
+            gearLabel.setText(gear);
+            if (gear.equals(NEUTRAL)) {
+                shiftStart = System.currentTimeMillis();
+                metricsLabel.setVisible(false);
+            } else {
+                calculateDelta();
+            }
+            currentGear = gear;
+        }
+    }
+
+    private void calculateDelta() {
+        long delta = System.currentTimeMillis() - shiftStart;
+        if (delta < 1000) {
+            metricsLabel.setText("Δ " + delta + "ms");
+            metricsLabel.setVisible(true);
+        }
     }
 
     private void setupGearDisplay() {
         gearLabel = new JLabel();
         gearLabel.setForeground(Color.RED);
-        gearLabel.setText("N");
-        gearLabel.setBounds(0, 4, Utils.WIDTH, Utils.HEIGHT);
+        gearLabel.setBounds(0, 6, Utils.WIDTH, Utils.HEIGHT);
+        gearLabel.setText(NEUTRAL);
         gearLabel.setVerticalAlignment(JLabel.CENTER);
         gearLabel.setHorizontalAlignment(JLabel.CENTER);
         gearLabel.setFont(new Font("Dialog", Font.BOLD, 300));
@@ -92,10 +117,22 @@ public class DataPanel extends JLayeredPane {
         add(gearLabel, 0);
     }
 
+    private void setupMetricsDisplay() {
+        metricsLabel = new JLabel();
+        metricsLabel.setBounds(20, 150, 100, 50);
+        metricsLabel.setForeground(Color.WHITE);
+        metricsLabel.setVerticalAlignment(JLabel.CENTER);
+        metricsLabel.setHorizontalAlignment(JLabel.CENTER);
+        metricsLabel.setFont(new Font("Dialog", Font.BOLD, 16));
+        add(metricsLabel, 4);
+    }
+
     private void setupDebugValues() {
         debugLabel = new JLabel();
-        debugLabel.setBounds(8, 4, 100, 20);
-        debugLabel.setForeground(Color.DARK_GRAY);
-        add(debugLabel, 1);
+        if (Utils.isInDevMode()) {
+            debugLabel.setBounds(12, 8, 100, 20);
+            debugLabel.setForeground(Color.DARK_GRAY);
+            add(debugLabel, 1);
+        }
     }
 }

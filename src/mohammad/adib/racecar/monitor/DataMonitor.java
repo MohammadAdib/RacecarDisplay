@@ -69,7 +69,6 @@ public class DataMonitor {
             y = ySum / lines.length;
             // notify listeners
             for (DataListener listener : listeners) listener.onDataChanged(x, y);
-            //System.out.println(x + ", " + y);
         } catch (Exception e) {
             e.printStackTrace();
         }
