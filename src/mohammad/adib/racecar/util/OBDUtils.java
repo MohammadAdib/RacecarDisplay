@@ -13,6 +13,10 @@ public class OBDUtils {
         return (int) ((Integer.decode("0x" + load.substring(load.length() - 2)) / 2.55) + 0.5);
     }
 
+    public static int getThrottle(String throttle) {
+        return (int) ((Integer.decode("0x" + throttle.substring(throttle.length() - 2)) / 2.55) + 0.5);
+    }
+
     public static int getIntakeTemp(String intakeTemp) {
         return getTemp(intakeTemp);
     }

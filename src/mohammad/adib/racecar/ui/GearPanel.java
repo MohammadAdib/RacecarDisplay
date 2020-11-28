@@ -3,6 +3,7 @@ package mohammad.adib.racecar.ui;
 import mohammad.adib.racecar.model.Calibration;
 import mohammad.adib.racecar.model.GearInfo;
 import mohammad.adib.racecar.monitor.GearDataMonitor;
+import mohammad.adib.racecar.monitor.OBDMonitor;
 import mohammad.adib.racecar.util.Utils;
 
 import javax.swing.*;
@@ -14,12 +15,13 @@ import java.io.IOException;
 public class GearPanel extends JLayeredPane {
 
     private static final String NEUTRAL = "N";
+    private final GearDataMonitor dataMonitor = GearDataMonitor.getInstance();
+    private final OBDMonitor obdMonitor = OBDMonitor.getInstance();
     private GearCalibrationPanel calibrationPanel;
     private BottomPanel bottomPanel;
     private RPMPanel rpmPanel;
     private JProgressBar loadBar, throttleBar;
     private JLabel gearLabel, metricsLabel;
-    private final GearDataMonitor dataMonitor = GearDataMonitor.getInstance();
     private Calibration calibration;
     private String currentGear = NEUTRAL;
     private long shiftStart = 0;
@@ -36,13 +38,7 @@ public class GearPanel extends JLayeredPane {
         loadCalibration();
         setupGear();
         setupDelta();
-        setupBottom();
-        setupLoad();
-        setupThrottle();
-        setupRPM();
         listenForData();
-        metricsLabel.setText("Δ 234ms");
-        metricsLabel.setVisible(true);
     }
 
     private void loadCalibration() {
@@ -74,6 +70,20 @@ public class GearPanel extends JLayeredPane {
                 }
             }
             if (!inGear) setGear(NEUTRAL);
+        });
+        obdMonitor.addListener(new OBDMonitor.OBDListener() {
+            @Override
+            public void onUpdate(int rpm, int load, int throttle, int intakeTemp, int coolantTemp) {
+                rpmPanel.setRPM(rpm);
+                loadBar.setValue(load);
+                throttleBar.setValue(throttle);
+                bottomPanel.setTemps(coolantTemp, intakeTemp);
+            }
+
+            @Override
+            public void onActive() {
+                displayOBDData();
+            }
         });
     }
 
@@ -177,7 +187,14 @@ public class GearPanel extends JLayeredPane {
 
     private void setupRPM() {
         rpmPanel = new RPMPanel();
-        rpmPanel.setBounds(24,0,Utils.WIDTH - 48 , 80);
+        rpmPanel.setBounds(24, 0, Utils.WIDTH - 48, 80);
         add(rpmPanel, 0);
+    }
+
+    private void displayOBDData() {
+        setupBottom();
+        setupLoad();
+        setupThrottle();
+        setupRPM();
     }
 }

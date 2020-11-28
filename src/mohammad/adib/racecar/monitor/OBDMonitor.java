@@ -13,12 +13,14 @@ public class OBDMonitor {
 
     private static final String RPM = "010C";
     private static final String LOAD = "0104";
+    private static final String THROTTLE = "0111";
     private static final String INTAKE_TEMP = "010F";
     private static final String COOLANT_TEMP = "0105";
     protected ScheduledThreadPoolExecutor executor;
     private static OBDMonitor instance;
     private SerialPort serialPort;
     private final List<OBDListener> listeners;
+    private boolean active;
 
     public static OBDMonitor getInstance() {
         if (instance == null) {
@@ -51,9 +53,14 @@ public class OBDMonitor {
                 while (serialPort.isOpened()) {
                     int rpm = OBDUtils.getRPM(sendCommand(RPM));
                     int load = OBDUtils.getLoad(sendCommand(LOAD));
+                    int throttle = OBDUtils.getThrottle(sendCommand(THROTTLE));
                     int intakeTemp = OBDUtils.getIntakeTemp(sendCommand(INTAKE_TEMP));
                     int coolantTemp = OBDUtils.getCoolantTemp(sendCommand(COOLANT_TEMP));
-                    for (OBDListener listener : listeners) listener.onUpdate(rpm, load, intakeTemp, coolantTemp);
+                    if (!active) {
+                        for (OBDListener listener : listeners) listener.onActive();
+                        active = true;
+                    }
+                    for (OBDListener listener : listeners) listener.onUpdate(rpm, load, throttle, intakeTemp, coolantTemp);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -106,6 +113,9 @@ public class OBDMonitor {
     }
 
     public interface OBDListener {
-        public void onUpdate(int rpm, int load, int intakeTemp, int coolantTemp);
+
+        public void onUpdate(int rpm, int load, int throttle, int intakeTemp, int coolantTemp);
+
+        public void onActive();
     }
 }
