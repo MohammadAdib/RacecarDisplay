@@ -1,5 +1,6 @@
 package mohammad.adib.racecar.util;
 
+import mohammad.adib.racecar.Main;
 import mohammad.adib.racecar.model.Calibration;
 import mohammad.adib.racecar.model.GearInfo;
 
@@ -46,7 +47,7 @@ public class Utils {
         BufferedWriter out = new BufferedWriter(new FileWriter(getPathToCalibration()));
         out.write(calibration.toString());
         out.close();
-        System.out.println("Calibration saved successfully");
+        Main.printToConsole("Calibration saved successfully");
     }
 
     public static Calibration getCalibration() throws IOException {

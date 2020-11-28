@@ -2,6 +2,7 @@ package mohammad.adib.racecar.monitor;
 
 import jssc.SerialPort;
 import jssc.SerialPortException;
+import mohammad.adib.racecar.Main;
 import mohammad.adib.racecar.util.OBDUtils;
 import mohammad.adib.racecar.util.Utils;
 
@@ -81,7 +82,7 @@ public class OBDMonitor {
     }
 
     private String sendCommand(String command, boolean sleep, boolean log) {
-        if (log) System.out.println(command + " --------------------");
+        if (log) Main.printToConsole(command + " --------------------");
         command = command + "\r";
         try {
             serialPort.writeBytes(command.getBytes());
@@ -96,7 +97,7 @@ public class OBDMonitor {
             }
             String s = builder.toString().trim();
             s = s.replaceAll("SEARCHING...", "").replaceAll(" ", "");
-            if (log) System.out.println(s);
+            if (log) Main.printToConsole(s);
             return s;
         } catch (SerialPortException e) {
             e.printStackTrace();

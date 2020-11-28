@@ -1,9 +1,12 @@
 package mohammad.adib.racecar.ui;
 
+import mohammad.adib.racecar.Main;
 import mohammad.adib.racecar.model.Calibration;
 import mohammad.adib.racecar.model.GearInfo;
 import mohammad.adib.racecar.monitor.GearDataMonitor;
-import mohammad.adib.racecar.util.*;
+import mohammad.adib.racecar.util.CalibrationListener;
+import mohammad.adib.racecar.util.DataListener;
+import mohammad.adib.racecar.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,7 +64,7 @@ public class GearCalibrationPanel extends JLayeredPane implements DataListener {
     private void startCalibration() {
         new Thread(() -> {
             sleep(1000);
-            System.out.println("Starting calibration");
+            Main.printToConsole("Starting calibration");
             for (String gear : GEARS) {
                 gearLabel.setText(gear);
                 sleep(DELAY);

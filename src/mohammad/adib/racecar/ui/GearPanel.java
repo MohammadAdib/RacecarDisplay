@@ -21,7 +21,7 @@ public class GearPanel extends JLayeredPane {
     private BottomPanel bottomPanel;
     private RPMPanel rpmPanel;
     private JProgressBar loadBar, throttleBar;
-    private JLabel gearLabel, metricsLabel;
+    private JLabel gearLabel, metricsLabel, console;
     private Calibration calibration;
     private String currentGear = NEUTRAL;
     private long shiftStart = 0;
@@ -38,6 +38,7 @@ public class GearPanel extends JLayeredPane {
         loadCalibration();
         setupGear();
         setupDelta();
+        setupConsole();
         listenForData();
     }
 
@@ -196,5 +197,16 @@ public class GearPanel extends JLayeredPane {
         setupLoad();
         setupThrottle();
         setupRPM();
+    }
+
+    private void setupConsole() {
+        console = new JLabel();
+        console.setForeground(Color.WHITE);
+        console.setBounds(0,0,Utils.WIDTH, Utils.HEIGHT);
+    }
+
+    public void println(String s) {
+        console.setText(s);
+        System.out.println(s);
     }
 }

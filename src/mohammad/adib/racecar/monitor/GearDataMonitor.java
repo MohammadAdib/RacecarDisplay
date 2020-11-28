@@ -2,6 +2,7 @@ package mohammad.adib.racecar.monitor;
 
 import jssc.SerialPort;
 import jssc.SerialPortException;
+import mohammad.adib.racecar.Main;
 import mohammad.adib.racecar.util.DataListener;
 import mohammad.adib.racecar.util.Utils;
 
@@ -38,7 +39,7 @@ public class GearDataMonitor {
                 while (serialPort.isOpened()) {
                     processMessage(serialPort.readString(128));
                 }
-                System.out.println("Started monitoring serial: " + serialPort.getPortName());
+                Main.printToConsole("Started monitoring serial: " + serialPort.getPortName());
             } catch (SerialPortException e) {
                 System.err.println("Failed to monitor serial data");
             }

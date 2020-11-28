@@ -1,6 +1,7 @@
 package mohammad.adib.racecar;
 
 import mohammad.adib.racecar.monitor.GearDataMonitor;
+import mohammad.adib.racecar.monitor.OBDMonitor;
 import mohammad.adib.racecar.ui.GUI;
 import mohammad.adib.racecar.util.Utils;
 
@@ -15,7 +16,7 @@ public class Main {
     public static void main(String[] args) {
         initUI();
         GearDataMonitor.getInstance().start();
-        //OBDMonitor.getInstance().start();
+        OBDMonitor.getInstance().start();
     }
 
     private static void initUI() {
@@ -36,5 +37,9 @@ public class Main {
         frame.dispose();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+    }
+
+    public static void printToConsole(String s) {
+        gui.dataPanel.println(s);
     }
 }

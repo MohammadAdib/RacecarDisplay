@@ -9,7 +9,7 @@
     </properties>
     <border type="none"/>
     <children>
-      <component id="f7e79" class="mohammad.adib.racecar.ui.GearPanel">
+      <component id="f7e79" class="mohammad.adib.racecar.ui.GearPanel" binding="dataPanel">
         <constraints border-constraint="Center"/>
         <properties/>
       </component>
