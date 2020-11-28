@@ -15,6 +15,9 @@ public class GearPanel extends JLayeredPane {
 
     private static final String NEUTRAL = "N";
     private GearCalibrationPanel calibrationPanel;
+    private BottomPanel bottomPanel;
+    private RPMPanel rpmPanel;
+    private JProgressBar loadBar, throttleBar;
     private JLabel gearLabel, metricsLabel;
     private final GearDataMonitor dataMonitor = GearDataMonitor.getInstance();
     private Calibration calibration;
@@ -31,9 +34,15 @@ public class GearPanel extends JLayeredPane {
 
     private void init() {
         loadCalibration();
-        setupGearDisplay();
-        setupMetricsDisplay();
+        setupGear();
+        setupDelta();
+        setupBottom();
+        setupLoad();
+        setupThrottle();
+        setupRPM();
         listenForData();
+        metricsLabel.setText("Δ 234ms");
+        metricsLabel.setVisible(true);
     }
 
     private void loadCalibration() {
@@ -89,14 +98,14 @@ public class GearPanel extends JLayeredPane {
         }
     }
 
-    private void setupGearDisplay() {
+    private void setupGear() {
         gearLabel = new JLabel();
         gearLabel.setForeground(Color.RED);
         gearLabel.setBounds(0, 6, Utils.WIDTH, Utils.HEIGHT);
         gearLabel.setText(NEUTRAL);
         gearLabel.setVerticalAlignment(JLabel.CENTER);
         gearLabel.setHorizontalAlignment(JLabel.CENTER);
-        gearLabel.setFont(new Font("Dialog", Font.BOLD, 300));
+        gearLabel.setFont(new Font("Dialog", Font.BOLD, 240));
         gearLabel.addMouseListener(new MouseAdapter() {
             long pressedTime;
 
@@ -112,16 +121,63 @@ public class GearPanel extends JLayeredPane {
                 }
             }
         });
-        add(gearLabel, 0);
+        add(gearLabel, 1);
     }
 
-    private void setupMetricsDisplay() {
+    private void setupDelta() {
         metricsLabel = new JLabel();
-        metricsLabel.setBounds(20, 150, 100, 50);
+        metricsLabel.setBounds(0, 260, Utils.WIDTH, 50);
         metricsLabel.setForeground(Color.WHITE);
         metricsLabel.setVerticalAlignment(JLabel.CENTER);
         metricsLabel.setHorizontalAlignment(JLabel.CENTER);
-        metricsLabel.setFont(new Font("Dialog", Font.BOLD, 16));
-        add(metricsLabel, 4);
+        metricsLabel.setFont(new Font("Dialog", Font.BOLD, 15));
+        add(metricsLabel, 0);
+    }
+
+    private void setupBottom() {
+        bottomPanel = new BottomPanel();
+        bottomPanel.setBounds(0, Utils.HEIGHT - 110, Utils.WIDTH, 110);
+        add(bottomPanel, 2);
+    }
+
+    private void setupLoad() {
+        loadBar = new JProgressBar(JProgressBar.VERTICAL, 0, 100);
+        loadBar.setValue(40);
+        loadBar.setBackground(Color.DARK_GRAY);
+        loadBar.setForeground(Color.RED);
+        loadBar.setBorderPainted(false);
+        loadBar.setBounds(0, 0, 24, Utils.HEIGHT);
+        add(loadBar, 0);
+
+        VerticalLabel loadLabel = new VerticalLabel("LOAD");
+        loadLabel.setDirection(VerticalLabel.Direction.VERTICAL_DOWN);
+        loadLabel.setForeground(Color.RED);
+        loadLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
+        loadLabel.setBounds(0, 30, 100, 100);
+        add(loadLabel, 0);
+    }
+
+    private void setupThrottle() {
+        Color color = Color.decode("#6ab04c");
+        throttleBar = new JProgressBar(JProgressBar.VERTICAL, 0, 100);
+        throttleBar.setValue(60);
+        throttleBar.setBackground(Color.DARK_GRAY);
+        throttleBar.setForeground(color);
+        throttleBar.setBorderPainted(false);
+        throttleBar.setBounds(Utils.WIDTH - 24, 0, 24, Utils.HEIGHT);
+        add(throttleBar, 0);
+
+        VerticalLabel throttleLabel = new VerticalLabel("THROTTLE");
+        throttleLabel.setDirection(VerticalLabel.Direction.VERTICAL_DOWN);
+        throttleLabel.setForeground(color);
+        throttleLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
+        throttleLabel.setBounds(Utils.WIDTH - 96, 30, 100, 100);
+        add(throttleLabel, 0);
+    }
+
+    private void setupRPM() {
+        rpmPanel = new RPMPanel();
+        rpmPanel.setBounds(24,0,Utils.WIDTH - 48 , 80);
+        add(rpmPanel, 0);
     }
 }

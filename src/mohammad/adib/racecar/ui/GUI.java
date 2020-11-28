@@ -4,5 +4,4 @@ import javax.swing.*;
 
 public class GUI {
     public JPanel mainPanel;
-    private GearPanel dataPanel;
 }

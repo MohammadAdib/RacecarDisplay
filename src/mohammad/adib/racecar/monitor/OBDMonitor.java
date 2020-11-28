@@ -38,19 +38,19 @@ public class OBDMonitor {
         } catch (SerialPortException e) {
             e.printStackTrace();
         }
+        Utils.sleep(1000);
+        sendCommand("ATZ", true, true);
+        sendCommand("ATL1", true, true);
+        sendCommand("ATH0", true, true);
+        sendCommand("ATE0", true, true);
+        sendCommand("ATS1", true, true);
+        sendCommand("ATSP0", true, true);
         executor = new ScheduledThreadPoolExecutor(1);
         executor.execute(() -> {
             try {
-                sendCommand("ATZ", true, true);
-                Utils.sleep(1000);
-                sendCommand("ATL1", true, true);
-                sendCommand("ATH0", true, true);
-                sendCommand("ATE0", true, true);
-                sendCommand("ATS1", true, true);
-                sendCommand("ATSP0", true, true);
                 while (serialPort.isOpened()) {
                     int rpm = OBDUtils.getRPM(sendCommand(RPM));
-                    int load = OBDUtils.getRPM(sendCommand(LOAD));
+                    int load = OBDUtils.getLoad(sendCommand(LOAD));
                     int intakeTemp = OBDUtils.getIntakeTemp(sendCommand(INTAKE_TEMP));
                     int coolantTemp = OBDUtils.getCoolantTemp(sendCommand(COOLANT_TEMP));
                     for (OBDListener listener : listeners) listener.onUpdate(rpm, load, intakeTemp, coolantTemp);
@@ -70,7 +70,7 @@ public class OBDMonitor {
     }
 
     private String sendCommand(String command) {
-        return sendCommand(command, false, true);
+        return sendCommand(command, false, false);
     }
 
     private String sendCommand(String command, boolean sleep, boolean log) {
@@ -78,7 +78,7 @@ public class OBDMonitor {
         command = command + "\r";
         try {
             serialPort.writeBytes(command.getBytes());
-            Utils.sleep(250);
+            if (sleep) Utils.sleep(250);
             byte b;
             StringBuilder builder = new StringBuilder();
             while ((b = serialPort.readBytes(1)[0]) > -1) {

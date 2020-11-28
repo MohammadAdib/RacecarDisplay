@@ -1,6 +1,6 @@
 package mohammad.adib.racecar;
 
-import mohammad.adib.racecar.monitor.OBDMonitor;
+import mohammad.adib.racecar.monitor.GearDataMonitor;
 import mohammad.adib.racecar.ui.GUI;
 import mohammad.adib.racecar.util.Utils;
 
@@ -13,16 +13,9 @@ public class Main {
     public static GUI gui;
 
     public static void main(String[] args) {
-        //initUI();
-        //GearDataMonitor.getInstance().start();
-        OBDMonitor.getInstance().start();
-        OBDMonitor.getInstance().addListener((rpm, load, intakeTemp, coolantTemp) -> {
-            System.out.println("RPM: " + rpm);
-            System.out.println("LOAD: " + load);
-            System.out.println("INTAKE: " + intakeTemp);
-            System.out.println("COOLANT: " + coolantTemp);
-            System.out.println("-----------------");
-        });
+        initUI();
+        GearDataMonitor.getInstance().start();
+        //OBDMonitor.getInstance().start();
     }
 
     private static void initUI() {
