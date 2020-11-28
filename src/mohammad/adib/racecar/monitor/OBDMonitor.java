@@ -32,6 +32,7 @@ public class OBDMonitor {
 
     private OBDMonitor() {
         listeners = new ArrayList<>();
+        executor = new ScheduledThreadPoolExecutor(1);
     }
 
     public void start() {
@@ -48,7 +49,6 @@ public class OBDMonitor {
         sendCommand("ATE0", true, true);
         sendCommand("ATS1", true, true);
         sendCommand("ATSP0", true, true);
-        executor = new ScheduledThreadPoolExecutor(1);
         executor.execute(() -> {
             try {
                 while (serialPort.isOpened()) {
@@ -61,7 +61,8 @@ public class OBDMonitor {
                         for (OBDListener listener : listeners) listener.onActive();
                         active = true;
                     }
-                    for (OBDListener listener : listeners) listener.onUpdate(rpm, load, throttle, intakeTemp, coolantTemp);
+                    for (OBDListener listener : listeners)
+                        listener.onUpdate(rpm, load, throttle, intakeTemp, coolantTemp);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -97,6 +98,10 @@ public class OBDMonitor {
             }
             String s = builder.toString().trim();
             s = s.replaceAll("SEARCHING...", "").replaceAll(" ", "");
+            if (s.contains("N")) {
+                serialPort.closePort();
+                start();
+            }
             if (log) Main.printToConsole(s);
             return s;
         } catch (SerialPortException e) {

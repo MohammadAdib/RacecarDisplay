@@ -21,7 +21,7 @@ public class GearPanel extends JLayeredPane {
     private BottomPanel bottomPanel;
     private RPMPanel rpmPanel;
     private JProgressBar loadBar, throttleBar;
-    private JLabel gearLabel, metricsLabel, console;
+    private JLabel gearLabel, metricsLabel;
     private Calibration calibration;
     private String currentGear = NEUTRAL;
     private long shiftStart = 0;
@@ -38,7 +38,10 @@ public class GearPanel extends JLayeredPane {
         loadCalibration();
         setupGear();
         setupDelta();
-        setupConsole();
+        setupBottom();
+        setupLoad();
+        setupThrottle();
+        setupRPM();
         listenForData();
     }
 
@@ -83,7 +86,8 @@ public class GearPanel extends JLayeredPane {
 
             @Override
             public void onActive() {
-                displayOBDData();
+                rpmPanel.setVisible(true);
+                bottomPanel.setVisible(true);
             }
         });
     }
@@ -112,7 +116,7 @@ public class GearPanel extends JLayeredPane {
     private void setupGear() {
         gearLabel = new JLabel();
         gearLabel.setForeground(Color.RED);
-        gearLabel.setBounds(0, 6, Utils.WIDTH, Utils.HEIGHT);
+        gearLabel.setBounds(0, 15, Utils.WIDTH, Utils.HEIGHT);
         gearLabel.setText(NEUTRAL);
         gearLabel.setVerticalAlignment(JLabel.CENTER);
         gearLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -137,7 +141,7 @@ public class GearPanel extends JLayeredPane {
 
     private void setupDelta() {
         metricsLabel = new JLabel();
-        metricsLabel.setBounds(0, 260, Utils.WIDTH, 50);
+        metricsLabel.setBounds(0, 270, Utils.WIDTH, 50);
         metricsLabel.setForeground(Color.WHITE);
         metricsLabel.setVerticalAlignment(JLabel.CENTER);
         metricsLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -148,12 +152,12 @@ public class GearPanel extends JLayeredPane {
     private void setupBottom() {
         bottomPanel = new BottomPanel();
         bottomPanel.setBounds(0, Utils.HEIGHT - 110, Utils.WIDTH, 110);
+        bottomPanel.setBackground(Color.decode("#222222"));
         add(bottomPanel, 2);
     }
 
     private void setupLoad() {
         loadBar = new JProgressBar(JProgressBar.VERTICAL, 0, 100);
-        loadBar.setValue(40);
         loadBar.setBackground(Color.DARK_GRAY);
         loadBar.setForeground(Color.RED);
         loadBar.setBorderPainted(false);
@@ -164,14 +168,13 @@ public class GearPanel extends JLayeredPane {
         loadLabel.setDirection(VerticalLabel.Direction.VERTICAL_DOWN);
         loadLabel.setForeground(Color.RED);
         loadLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
-        loadLabel.setBounds(0, 30, 100, 100);
+        loadLabel.setBounds(0, 45, 100, 100);
         add(loadLabel, 0);
     }
 
     private void setupThrottle() {
         Color color = Color.decode("#6ab04c");
         throttleBar = new JProgressBar(JProgressBar.VERTICAL, 0, 100);
-        throttleBar.setValue(60);
         throttleBar.setBackground(Color.DARK_GRAY);
         throttleBar.setForeground(color);
         throttleBar.setBorderPainted(false);
@@ -182,31 +185,13 @@ public class GearPanel extends JLayeredPane {
         throttleLabel.setDirection(VerticalLabel.Direction.VERTICAL_DOWN);
         throttleLabel.setForeground(color);
         throttleLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
-        throttleLabel.setBounds(Utils.WIDTH - 96, 30, 100, 100);
+        throttleLabel.setBounds(Utils.WIDTH - 96, 45, 100, 100);
         add(throttleLabel, 0);
     }
 
     private void setupRPM() {
         rpmPanel = new RPMPanel();
-        rpmPanel.setBounds(24, 0, Utils.WIDTH - 48, 80);
+        rpmPanel.setBounds(24, 15, Utils.WIDTH - 48, 80);
         add(rpmPanel, 0);
-    }
-
-    private void displayOBDData() {
-        setupBottom();
-        setupLoad();
-        setupThrottle();
-        setupRPM();
-    }
-
-    private void setupConsole() {
-        console = new JLabel();
-        console.setForeground(Color.WHITE);
-        console.setBounds(0,0,Utils.WIDTH, Utils.HEIGHT);
-    }
-
-    public void println(String s) {
-        console.setText(s);
-        System.out.println(s);
     }
 }

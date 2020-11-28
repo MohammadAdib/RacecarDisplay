@@ -40,6 +40,6 @@ public class Main {
     }
 
     public static void printToConsole(String s) {
-        gui.dataPanel.println(s);
+        System.out.println(s);
     }
 }

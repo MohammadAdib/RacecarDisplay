@@ -21,7 +21,6 @@ public class RPMPanel extends JLayeredPane {
     public RPMPanel() {
         rpmLabel = new JLabel();
         rpmLabel.setForeground(Color.RED);
-        rpmLabel.setText("7100");
         rpmLabel.setVerticalAlignment(JLabel.CENTER);
         rpmLabel.setHorizontalAlignment(JLabel.CENTER);
         rpmLabel.setFont(new Font("Dialog", Font.BOLD, 40));

@@ -10,18 +10,17 @@ public class BottomPanel extends JLayeredPane {
     private JLabel coolantLabel, intakeLabel;
 
     public BottomPanel() {
-        setBackground(Color.decode("#222222"));
         setOpaque(true);
         setupImages();
         setupLabels();
     }
 
     private void setupImages() {
-        ImageIcon coolantIcon = new ImageIcon("coolant_temp.png");
+        ImageIcon coolantIcon = new ImageIcon("/home/pi/Documents/coolant_temp.png");
         JLabel coolantImageLabel = new JLabel(coolantIcon);
         coolantImageLabel.setBounds(78, 18, 38, 38);
         add(coolantImageLabel);
-        ImageIcon intakeIcon = new ImageIcon("intake_temp.png");
+        ImageIcon intakeIcon = new ImageIcon("/home/pi/Documents/intake_temp.png");
         JLabel intakeImageLabel = new JLabel(intakeIcon);
         intakeImageLabel.setBounds(Utils.WIDTH - 116, 18, 38, 38);
         add(intakeImageLabel);
