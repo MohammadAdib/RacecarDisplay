@@ -9,22 +9,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-public class DataMonitor {
+public class GearDataMonitor {
 
     protected ScheduledThreadPoolExecutor executor;
-    private static DataMonitor instance;
+    private static GearDataMonitor instance;
     private SerialPort serialPort;
-    private List<DataListener> listeners;
+    private final List<DataListener> listeners;
     private int x, y;
 
-    private DataMonitor() {
+    private GearDataMonitor() {
         executor = new ScheduledThreadPoolExecutor(1);
         listeners = new ArrayList<>();
     }
 
-    public static DataMonitor getInstance() {
+    public static GearDataMonitor getInstance() {
         if (instance == null) {
-            instance = new DataMonitor();
+            instance = new GearDataMonitor();
         }
         return instance;
     }

@@ -2,7 +2,7 @@ package mohammad.adib.racecar.ui;
 
 import mohammad.adib.racecar.model.Calibration;
 import mohammad.adib.racecar.model.GearInfo;
-import mohammad.adib.racecar.monitor.DataMonitor;
+import mohammad.adib.racecar.monitor.GearDataMonitor;
 import mohammad.adib.racecar.util.Utils;
 
 import javax.swing.*;
@@ -11,17 +11,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
-public class DataPanel extends JLayeredPane {
+public class GearPanel extends JLayeredPane {
 
     private static final String NEUTRAL = "N";
-    private CalibrationPanel calibrationPanel;
-    private JLabel gearLabel, metricsLabel, debugLabel;
-    private final DataMonitor dataMonitor = DataMonitor.getInstance();
+    private GearCalibrationPanel calibrationPanel;
+    private JLabel gearLabel, metricsLabel;
+    private final GearDataMonitor dataMonitor = GearDataMonitor.getInstance();
     private Calibration calibration;
     private String currentGear = NEUTRAL;
     private long shiftStart = 0;
 
-    public DataPanel() {
+    public GearPanel() {
         if (!Utils.isCalibrated()) {
             startCalibration();
         } else {
@@ -33,7 +33,6 @@ public class DataPanel extends JLayeredPane {
         loadCalibration();
         setupGearDisplay();
         setupMetricsDisplay();
-        setupDebugValues();
         listenForData();
     }
 
@@ -48,7 +47,7 @@ public class DataPanel extends JLayeredPane {
 
     private void startCalibration() {
         removeAll();
-        calibrationPanel = new CalibrationPanel(() -> {
+        calibrationPanel = new GearCalibrationPanel(() -> {
             remove(calibrationPanel);
             init();
         });
@@ -57,7 +56,6 @@ public class DataPanel extends JLayeredPane {
 
     private void listenForData() {
         dataMonitor.addListener((x, y) -> {
-            debugLabel.setText(x + ", " + y);
             boolean inGear = false;
             for (GearInfo gear : calibration.gears) {
                 if (Utils.isGearSelected(gear, x, y, calibration.margin)) {
@@ -125,14 +123,5 @@ public class DataPanel extends JLayeredPane {
         metricsLabel.setHorizontalAlignment(JLabel.CENTER);
         metricsLabel.setFont(new Font("Dialog", Font.BOLD, 16));
         add(metricsLabel, 4);
-    }
-
-    private void setupDebugValues() {
-        debugLabel = new JLabel();
-        if (Utils.isInDevMode()) {
-            debugLabel.setBounds(12, 8, 100, 20);
-            debugLabel.setForeground(Color.DARK_GRAY);
-            add(debugLabel, 1);
-        }
     }
 }

@@ -1,7 +1,6 @@
 package mohammad.adib.racecar;
 
-import jssc.SerialPort;
-import jssc.SerialPortException;
+import mohammad.adib.racecar.monitor.OBDMonitor;
 import mohammad.adib.racecar.ui.GUI;
 import mohammad.adib.racecar.util.Utils;
 
@@ -12,65 +11,18 @@ import java.awt.image.BufferedImage;
 public class Main {
 
     public static GUI gui;
-    static SerialPort serialPort;
 
     public static void main(String[] args) {
         //initUI();
-        //DataMonitor.getInstance().start();
-        startRfComm();
-    }
-
-    private static void printRPM(String s) {
-        s = s.substring(s.length() - 5).replaceAll(" ", "");
-        int x = Integer.decode("0x" + s.substring(0, 2));
-        int y = Integer.decode("0x" + s.substring(2, 4));
-        int rpm = (256 * x + y) / 4;
-        System.out.println("RPM: " + rpm);
-    }
-
-    private static void startRfComm() {
-        try {
-            serialPort = new SerialPort("/dev/rfcomm0");
-            serialPort.openPort();
-            Utils.sleep(1000);
-            sendCommand("ATZ");
-            sendCommand("ATL1");
-            sendCommand("ATH0");
-            sendCommand("ATE0");
-            sendCommand("ATS1");
-            sendCommand("ATSP0");
-            //sendCommand("0100");
-            while (true) {
-                String s = sendCommand("010C");
-                //printRPM(s);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static String sendCommand(String command) {
-        System.out.println(command + " -------------");
-        command = command + "\r";
-        try {
-            serialPort.writeBytes(command.getBytes());
-            Utils.sleep(250);
-            byte b;
-            StringBuilder builder = new StringBuilder();
-            while ((b = serialPort.readBytes(1)[0]) > -1) {
-                if (b == '>') {
-                    break;
-                }
-                builder.append((char) b);
-            }
-            String s = builder.toString().trim();
-            s = s.replaceAll("SEARCHING...", "");
-            System.out.println(s);
-            return s;
-        } catch (SerialPortException e) {
-            e.printStackTrace();
-        }
-        return "";
+        //GearDataMonitor.getInstance().start();
+        OBDMonitor.getInstance().start();
+        OBDMonitor.getInstance().addListener((rpm, load, intakeTemp, coolantTemp) -> {
+            System.out.println("RPM: " + rpm);
+            System.out.println("LOAD: " + load);
+            System.out.println("INTAKE: " + intakeTemp);
+            System.out.println("COOLANT: " + coolantTemp);
+            System.out.println("-----------------");
+        });
     }
 
     private static void initUI() {

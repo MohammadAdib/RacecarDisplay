@@ -2,7 +2,7 @@ package mohammad.adib.racecar.ui;
 
 import mohammad.adib.racecar.model.Calibration;
 import mohammad.adib.racecar.model.GearInfo;
-import mohammad.adib.racecar.monitor.DataMonitor;
+import mohammad.adib.racecar.monitor.GearDataMonitor;
 import mohammad.adib.racecar.util.*;
 
 import javax.swing.*;
@@ -10,16 +10,16 @@ import java.awt.*;
 
 import static mohammad.adib.racecar.util.Utils.sleep;
 
-public class CalibrationPanel extends JLayeredPane implements DataListener {
+public class GearCalibrationPanel extends JLayeredPane implements DataListener {
 
     private final static int DELAY = 4000;
     private final static String[] GEARS = new String[]{"R", "1", "2", "3", "4", "5"};
-    private final DataMonitor dataMonitor = DataMonitor.getInstance();
+    private final GearDataMonitor dataMonitor = GearDataMonitor.getInstance();
     private final Calibration calibration = new Calibration(30);
     private final CalibrationListener listener;
     private JLabel gearLabel, selectLabel, debugLabel;
 
-    public CalibrationPanel(CalibrationListener listener) {
+    public GearCalibrationPanel(CalibrationListener listener) {
         this.listener = listener;
         setBackground(Color.WHITE);
         setBounds(0, 0, Utils.WIDTH, Utils.HEIGHT);
