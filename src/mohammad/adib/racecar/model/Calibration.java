@@ -43,7 +43,7 @@ public class Calibration {
         JsonObject object = new JsonObject();
         object.put("margin", margin);
         JsonArray gearInfoArray = new JsonArray();
-        for(GearInfo gearInfo : gears) {
+        for (GearInfo gearInfo : gears) {
             gearInfoArray.add(gearInfo.asJsonObject());
         }
         object.put("gears", gearInfoArray);

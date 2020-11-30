@@ -1,5 +1,7 @@
 package mohammad.adib.racecar.util;
 
+import mohammad.adib.racecar.Main;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -17,7 +19,7 @@ public class MouseUtil implements Runnable, MouseListener {
 
     public void mouseReleased(MouseEvent e) {
         holding = false;
-        System.out.println("Held for: " + seconds);
+        Main.printToConsole("Held for: " + seconds);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class MouseUtil implements Runnable, MouseListener {
                 // put some code here
                 if (seconds == 3) {
                     holding = false;
-                    System.out.println("Held for maximum time!");
+                    Main.printToConsole("Held for maximum time!");
                 }
             }
         } catch (Exception e) {

@@ -2,6 +2,7 @@ package mohammad.adib.racecar.monitor;
 
 import jssc.SerialPort;
 import jssc.SerialPortException;
+import mohammad.adib.racecar.Main;
 import mohammad.adib.racecar.util.DataListener;
 import mohammad.adib.racecar.util.Utils;
 
@@ -9,22 +10,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-public class DataMonitor {
+public class GearDataMonitor {
 
+    private static GearDataMonitor instance;
+    private final List<DataListener> listeners;
     protected ScheduledThreadPoolExecutor executor;
-    private static DataMonitor instance;
     private SerialPort serialPort;
-    private List<DataListener> listeners;
     private int x, y;
 
-    private DataMonitor() {
+    private GearDataMonitor() {
         executor = new ScheduledThreadPoolExecutor(1);
         listeners = new ArrayList<>();
     }
 
-    public static DataMonitor getInstance() {
+    public static GearDataMonitor getInstance() {
         if (instance == null) {
-            instance = new DataMonitor();
+            instance = new GearDataMonitor();
         }
         return instance;
     }
@@ -38,7 +39,7 @@ public class DataMonitor {
                 while (serialPort.isOpened()) {
                     processMessage(serialPort.readString(128));
                 }
-                System.out.println("Started monitoring serial: " + serialPort.getPortName());
+                Main.printToConsole("Started monitoring serial: " + serialPort.getPortName());
             } catch (SerialPortException e) {
                 System.err.println("Failed to monitor serial data");
             }

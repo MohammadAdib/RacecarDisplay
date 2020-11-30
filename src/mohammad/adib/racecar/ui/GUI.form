@@ -9,11 +9,9 @@
     </properties>
     <border type="none"/>
     <children>
-      <component id="7f138" class="mohammad.adib.racecar.ui.DataPanel" binding="dataPanel">
+      <component id="f7e79" class="mohammad.adib.racecar.ui.GearPanel" binding="dataPanel">
         <constraints border-constraint="Center"/>
-        <properties>
-          <background color="-33536"/>
-        </properties>
+        <properties/>
       </component>
     </children>
   </grid>
