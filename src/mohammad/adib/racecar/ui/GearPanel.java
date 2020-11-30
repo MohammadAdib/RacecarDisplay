@@ -3,7 +3,7 @@ package mohammad.adib.racecar.ui;
 import mohammad.adib.racecar.model.Calibration;
 import mohammad.adib.racecar.model.GearInfo;
 import mohammad.adib.racecar.monitor.GearDataMonitor;
-import mohammad.adib.racecar.monitor.OBDMonitor;
+import mohammad.adib.racecar.monitor.OBDPythonMonitor;
 import mohammad.adib.racecar.util.Utils;
 
 import javax.swing.*;
@@ -16,12 +16,13 @@ public class GearPanel extends JLayeredPane {
 
     private static final String NEUTRAL = "N";
     private final GearDataMonitor dataMonitor = GearDataMonitor.getInstance();
-    private final OBDMonitor obdMonitor = OBDMonitor.getInstance();
+    private final OBDPythonMonitor obdMonitor = OBDPythonMonitor.getInstance();
     private GearCalibrationPanel calibrationPanel;
     private BottomPanel bottomPanel;
     private RPMPanel rpmPanel;
     private JProgressBar loadBar, throttleBar;
     private JLabel gearLabel, metricsLabel;
+    private VerticalLabel loadLabel, throttleLabel;
     private Calibration calibration;
     private String currentGear = NEUTRAL;
     private long shiftStart = 0;
@@ -42,6 +43,7 @@ public class GearPanel extends JLayeredPane {
         setupLoad();
         setupThrottle();
         setupRPM();
+        showOBDElements(false);
         listenForData();
     }
 
@@ -75,7 +77,7 @@ public class GearPanel extends JLayeredPane {
             }
             if (!inGear) setGear(NEUTRAL);
         });
-        obdMonitor.addListener(new OBDMonitor.OBDListener() {
+        obdMonitor.addListener(new OBDPythonMonitor.OBDListener() {
             @Override
             public void onUpdate(int rpm, int load, int throttle, int intakeTemp, int coolantTemp) {
                 rpmPanel.setRPM(rpm);
@@ -86,10 +88,15 @@ public class GearPanel extends JLayeredPane {
 
             @Override
             public void onActive() {
+                showOBDElements(true);
                 rpmPanel.setVisible(true);
+                loadBar.setVisible(true);
+                throttleBar.setVisible(true);
                 bottomPanel.setVisible(true);
             }
         });
+        GearDataMonitor.getInstance().start();
+        OBDPythonMonitor.getInstance().start();
     }
 
     private void setGear(String gear) {
@@ -116,7 +123,7 @@ public class GearPanel extends JLayeredPane {
     private void setupGear() {
         gearLabel = new JLabel();
         gearLabel.setForeground(Color.RED);
-        gearLabel.setBounds(0, 15, Utils.WIDTH, Utils.HEIGHT);
+        gearLabel.setBounds(0, 28, Utils.WIDTH, Utils.HEIGHT);
         gearLabel.setText(NEUTRAL);
         gearLabel.setVerticalAlignment(JLabel.CENTER);
         gearLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -164,7 +171,7 @@ public class GearPanel extends JLayeredPane {
         loadBar.setBounds(0, 0, 24, Utils.HEIGHT);
         add(loadBar, 0);
 
-        VerticalLabel loadLabel = new VerticalLabel("LOAD");
+        loadLabel = new VerticalLabel("LOAD");
         loadLabel.setDirection(VerticalLabel.Direction.VERTICAL_DOWN);
         loadLabel.setForeground(Color.RED);
         loadLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
@@ -181,7 +188,7 @@ public class GearPanel extends JLayeredPane {
         throttleBar.setBounds(Utils.WIDTH - 24, 0, 24, Utils.HEIGHT);
         add(throttleBar, 0);
 
-        VerticalLabel throttleLabel = new VerticalLabel("THROTTLE");
+        throttleLabel = new VerticalLabel("THROTTLE");
         throttleLabel.setDirection(VerticalLabel.Direction.VERTICAL_DOWN);
         throttleLabel.setForeground(color);
         throttleLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
@@ -193,5 +200,15 @@ public class GearPanel extends JLayeredPane {
         rpmPanel = new RPMPanel();
         rpmPanel.setBounds(24, 15, Utils.WIDTH - 48, 80);
         add(rpmPanel, 0);
+    }
+
+    private void showOBDElements(boolean show) {
+        rpmPanel.setVisible(show);
+        loadBar.setVisible(show);
+        throttleBar.setVisible(show);
+        bottomPanel.setVisible(show);
+        throttleLabel.setVisible(show);
+        loadLabel.setVisible(show);
+        gearLabel.setBounds(0, show ? 28 : 0, Utils.WIDTH, Utils.HEIGHT);
     }
 }

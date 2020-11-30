@@ -12,10 +12,10 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class GearDataMonitor {
 
-    protected ScheduledThreadPoolExecutor executor;
     private static GearDataMonitor instance;
-    private SerialPort serialPort;
     private final List<DataListener> listeners;
+    protected ScheduledThreadPoolExecutor executor;
+    private SerialPort serialPort;
     private int x, y;
 
     private GearDataMonitor() {

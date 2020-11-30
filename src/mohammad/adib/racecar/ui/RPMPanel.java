@@ -15,7 +15,7 @@ public class RPMPanel extends JLayeredPane {
 
     private static final Color[] COLORS = new Color[]{BLUE, BLUE, YELLOW, RED, RED, YELLOW, BLUE, BLUE};
     private static final int[] THRESHOLDS = new int[]{1000, 2500, 5000, 6500, 6500, 5000, 2500, 1000};
-    private JLabel rpmLabel;
+    private final JLabel rpmLabel;
     private int rpm;
 
     public RPMPanel() {

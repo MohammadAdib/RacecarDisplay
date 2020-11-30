@@ -2,7 +2,7 @@ from __future__ import print_function
 from time import sleep
 import obd
 
-connection = obd.Async()
+connection = obd.Async("/dev/ttyUSB1")
 
 connection.watch(obd.commands.RPM)
 connection.watch(obd.commands.ENGINE_LOAD)

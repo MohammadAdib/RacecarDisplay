@@ -17,33 +17,25 @@ import java.awt.geom.AffineTransform;
  */
 public class VerticalLabel extends JLabel {
 
-    /** Serialisation ID. */
+    /**
+     * Serialisation ID.
+     */
     private static final long serialVersionUID = -5589305224172247331L;
-
-    /** Represents the direction of a rotated label. */
-    public enum Direction {
-        /** Normal horizontal direction. */
-        HORIZONTAL,
-        /** Vertical, upwards (for left-to-right languages). */
-        VERTICAL_UP,
-        /** Vertical, downwards (for left-to-right languages). */
-        VERTICAL_DOWN
-    }
-
-    /** The text direction. */
+    /**
+     * The text direction.
+     */
     private Direction direction;
+    /**
+     * A flag indicating whether {link #getSize()} and such methods need to return
+     * a rotated dimension.
+     */
+    private boolean needsRotate;
 
     {
         // it's better to set this here as default for all constructors since they
         // only call the super constructors.
         setDirection(Direction.HORIZONTAL);
     }
-
-    /**
-     * A flag indicating whether {link #getSize()} and such methods need to return
-     * a rotated dimension.
-     */
-    private boolean needsRotate;
 
     /**
      * Initialises a new instance of the {@link VerticalLabel} class using default
@@ -57,10 +49,8 @@ public class VerticalLabel extends JLabel {
      * Initialises a new instance of the {@link VerticalLabel} class using the
      * specified icon and horizontal alignment.
      *
-     * @param image
-     *          The icon to use for this label.
-     * @param horizontalAlignment
-     *          The horizontal alignment of the text.
+     * @param image               The icon to use for this label.
+     * @param horizontalAlignment The horizontal alignment of the text.
      */
     public VerticalLabel(Icon image, int horizontalAlignment) {
         super(image, horizontalAlignment);
@@ -70,8 +60,7 @@ public class VerticalLabel extends JLabel {
      * Initialises a new instance of the {@link VerticalLabel} class using the
      * specified icon.
      *
-     * @param image
-     *          The icon to use for this label.
+     * @param image The icon to use for this label.
      */
     public VerticalLabel(Icon image) {
         super(image);
@@ -81,12 +70,9 @@ public class VerticalLabel extends JLabel {
      * Initialises a new instance of the {@link VerticalLabel} class using the
      * specified text, icon and horizontal alignment.
      *
-     * @param text
-     *          The text to display.
-     * @param icon
-     *          The icon to use for this label.
-     * @param horizontalAlignment
-     *          The horizontal alignment of the text.
+     * @param text                The text to display.
+     * @param icon                The icon to use for this label.
+     * @param horizontalAlignment The horizontal alignment of the text.
      */
     public VerticalLabel(String text, Icon icon, int horizontalAlignment) {
         super(text, icon, horizontalAlignment);
@@ -96,10 +82,8 @@ public class VerticalLabel extends JLabel {
      * Initialises a new instance of the {@link VerticalLabel} class using the
      * specified text and horizontal alignment.
      *
-     * @param text
-     *          The text to display.
-     * @param horizontalAlignment
-     *          The horizontal alignment of the text.
+     * @param text                The text to display.
+     * @param horizontalAlignment The horizontal alignment of the text.
      */
     public VerticalLabel(String text, int horizontalAlignment) {
         super(text, horizontalAlignment);
@@ -109,11 +93,28 @@ public class VerticalLabel extends JLabel {
      * Initialises a new instance of the {@link VerticalLabel} class using the
      * specified text.
      *
-     * @param text
-     *          The text to display.
+     * @param text The text to display.
      */
     public VerticalLabel(String text) {
         super(text);
+    }
+
+    /**
+     * Test method.
+     *
+     * @param args command line arguments.
+     */
+    public static void main(String[] args) {
+        JFrame f = new JFrame("Test");
+        f.setLayout(new FlowLayout());
+        VerticalLabel rl = new VerticalLabel("BLAHBLAH");
+        rl.setBackground(Color.ORANGE);
+        rl.setOpaque(true);
+        rl.setDirection(Direction.VERTICAL_DOWN);
+        f.add(rl);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.pack();
+        f.setVisible(true);
     }
 
     /**
@@ -128,8 +129,7 @@ public class VerticalLabel extends JLabel {
     /**
      * Sets the text direction of this {@link VerticalLabel}.
      *
-     * @param direction
-     *          The new direction.
+     * @param direction The new direction.
      */
     public void setDirection(Direction direction) {
         this.direction = direction;
@@ -223,22 +223,21 @@ public class VerticalLabel extends JLabel {
     }
 
     /**
-     * Test method.
-     *
-     * @param args
-     *          command line arguments.
+     * Represents the direction of a rotated label.
      */
-    public static void main(String[] args) {
-        JFrame f = new JFrame("Test");
-        f.setLayout(new FlowLayout());
-        VerticalLabel rl = new VerticalLabel("BLAHBLAH");
-        rl.setBackground(Color.ORANGE);
-        rl.setOpaque(true);
-        rl.setDirection(Direction.VERTICAL_DOWN);
-        f.add(rl);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.pack();
-        f.setVisible(true);
+    public enum Direction {
+        /**
+         * Normal horizontal direction.
+         */
+        HORIZONTAL,
+        /**
+         * Vertical, upwards (for left-to-right languages).
+         */
+        VERTICAL_UP,
+        /**
+         * Vertical, downwards (for left-to-right languages).
+         */
+        VERTICAL_DOWN
     }
 
 }
