@@ -209,6 +209,6 @@ public class GearPanel extends JLayeredPane {
         bottomPanel.setVisible(show);
         throttleLabel.setVisible(show);
         loadLabel.setVisible(show);
-        gearLabel.setBounds(0, show ? 28 : 0, Utils.WIDTH, Utils.HEIGHT);
+        gearLabel.setBounds(0, show ? 24 : 5, Utils.WIDTH, Utils.HEIGHT);
     }
 }
