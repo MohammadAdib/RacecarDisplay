@@ -36,10 +36,10 @@ public class GearDataMonitor {
                 serialPort = new SerialPort(Utils.isInDevMode() ? "COM6" : "/dev/ttyUSB0");
                 serialPort.openPort();
                 serialPort.setParams(9600, 8, 1, 0);
+                Main.printToConsole("Started monitoring serial: " + serialPort.getPortName());
                 while (serialPort.isOpened()) {
                     processMessage(serialPort.readString(128));
                 }
-                Main.printToConsole("Started monitoring serial: " + serialPort.getPortName());
             } catch (SerialPortException e) {
                 System.err.println("Failed to monitor serial data");
             }

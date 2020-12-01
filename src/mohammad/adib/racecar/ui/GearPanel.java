@@ -66,6 +66,7 @@ public class GearPanel extends JLayeredPane {
     }
 
     private void listenForData() {
+        GearDataMonitor.getInstance().start();
         dataMonitor.addListener((x, y) -> {
             boolean inGear = false;
             for (GearInfo gear : calibration.gears) {
@@ -95,7 +96,6 @@ public class GearPanel extends JLayeredPane {
                 bottomPanel.setVisible(true);
             }
         });
-        GearDataMonitor.getInstance().start();
         OBDPythonMonitor.getInstance().start();
     }
 
@@ -123,7 +123,7 @@ public class GearPanel extends JLayeredPane {
     private void setupGear() {
         gearLabel = new JLabel();
         gearLabel.setForeground(Color.RED);
-        gearLabel.setBounds(0, 28, Utils.WIDTH, Utils.HEIGHT);
+        gearLabel.setBounds(0, 24, Utils.WIDTH, Utils.HEIGHT);
         gearLabel.setText(NEUTRAL);
         gearLabel.setVerticalAlignment(JLabel.CENTER);
         gearLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -198,7 +198,7 @@ public class GearPanel extends JLayeredPane {
 
     private void setupRPM() {
         rpmPanel = new RPMPanel();
-        rpmPanel.setBounds(24, 15, Utils.WIDTH - 48, 80);
+        rpmPanel.setBounds(24, 10, Utils.WIDTH - 48, 80);
         add(rpmPanel, 0);
     }
 
