@@ -34,19 +34,11 @@ public class Utils {
     }
 
     private static String getPathToCalibration() {
-        if (isInDevMode()) {
-            return System.getProperty("user.home") + File.separator + "Desktop" + File.separator + CALIBRATION_FILE_NAME;
-        } else {
-            return "/home/pi/" + CALIBRATION_FILE_NAME;
-        }
+        return System.getProperty("user.home") + File.separator + CALIBRATION_FILE_NAME;
     }
 
     private static String getPathToLapTimes() {
-        if (isInDevMode()) {
-            return System.getProperty("user.home") + File.separator + "Desktop" + File.separator + LAP_TIMES_FILE_NAME;
-        } else {
-            return "/home/pi/" + CALIBRATION_FILE_NAME;
-        }
+        return System.getProperty("user.home") + File.separator + LAP_TIMES_FILE_NAME;
     }
 
     public static boolean isCalibrated() {

@@ -28,7 +28,7 @@ public class MainPanel extends JLayeredPane {
     private String currentGear = NEUTRAL;
     private boolean initialized = false, timing = false;
 
-    private MouseAdapter lapTimeMouseAdapter = new MouseAdapter() {
+    private final MouseAdapter lapTimeMouseAdapter = new MouseAdapter() {
         long pressedTime;
 
         @Override
@@ -90,12 +90,11 @@ public class MainPanel extends JLayeredPane {
     }
 
     private void startCalibration() {
-        removeAll();
         calibrationPanel = new GearCalibrationPanel(() -> {
-            remove(calibrationPanel);
+            removeAll();
             init();
         });
-        add(calibrationPanel, 2);
+        add(calibrationPanel, 1);
     }
 
     private void listenForData() {
