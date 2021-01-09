@@ -28,34 +28,6 @@ public class MainPanel extends JLayeredPane {
     private String currentGear = NEUTRAL;
     private boolean initialized = false, timing = false;
 
-    private final MouseAdapter lapTimeMouseAdapter = new MouseAdapter() {
-        long pressedTime;
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            pressedTime = System.currentTimeMillis();
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-            if (System.currentTimeMillis() - pressedTime < 1000) {
-                if (!timing) {
-                    startLapTimer();
-                } else {
-                    lapTimeData.addLapTime(getElapsedLapTime());
-                    lapStart = System.currentTimeMillis();
-                    Utils.saveLapTimes(lapTimeData);
-                }
-            } else {
-                // Clear lap times
-                lapTimeData = new LapTimeData();
-                Utils.saveLapTimes(lapTimeData);
-                timing = false;
-            }
-            updatePastLapTimes();
-        }
-    };
-
     private void init() {
         if (!Utils.isCalibrated()) {
             startCalibration();
@@ -122,11 +94,11 @@ public class MainPanel extends JLayeredPane {
     private void setupGear() {
         gearLabel = new JLabel();
         gearLabel.setForeground(Color.RED);
-        gearLabel.setBounds(10, TOP_MARGIN, getWidth() / 2, getHeight() - TOP_MARGIN - 80);
+        gearLabel.setBounds(10, 0, getWidth() / 2, getHeight());
         gearLabel.setText(NEUTRAL);
         gearLabel.setVerticalAlignment(JLabel.CENTER);
         gearLabel.setHorizontalAlignment(JLabel.CENTER);
-        gearLabel.setFont(new Font("Dialog", Font.BOLD, 240));
+        gearLabel.setFont(new Font("Dialog", Font.BOLD, 270));
         gearLabel.addMouseListener(new MouseAdapter() {
             long pressedTime;
 
@@ -147,23 +119,55 @@ public class MainPanel extends JLayeredPane {
 
     private void setupLapTimes() {
         lapTime = new JLabel();
-        lapTime.setBounds(10, getHeight() - BOTTOM_MARGIN - 50, getWidth() / 2, 40);
+        lapTime.setBounds(getWidth() / 2 + 20, TOP_MARGIN + 10, getWidth() / 2, 40);
         lapTime.setForeground(Color.WHITE);
         lapTime.setVerticalAlignment(JLabel.CENTER);
-        lapTime.setHorizontalAlignment(JLabel.CENTER);
-        lapTime.setFont(new Font("Dialog", Font.BOLD, 40));
+        lapTime.setHorizontalAlignment(JLabel.LEFT);
+        lapTime.setFont(new Font("Dialog", Font.BOLD, 36));
         lapTime.setText("00:00.000");
-        lapTime.addMouseListener(lapTimeMouseAdapter);
+        lapTime.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                timing = false;
+            }
+        });
         add(lapTime, 1);
 
         pastLapTimes = new JLabel();
-        pastLapTimes.setBounds(getWidth() / 2, TOP_MARGIN, getWidth() / 2, getHeight() - TOP_MARGIN);
+        pastLapTimes.setBounds(getWidth() / 2 + 20, TOP_MARGIN + 60, getWidth() / 2, getHeight() - TOP_MARGIN);
         pastLapTimes.setForeground(Color.WHITE);
-        pastLapTimes.setVerticalAlignment(JLabel.CENTER);
-        pastLapTimes.setHorizontalAlignment(JLabel.CENTER);
+        pastLapTimes.setVerticalAlignment(JLabel.TOP);
+        pastLapTimes.setHorizontalAlignment(JLabel.LEFT);
         pastLapTimes.setFont(new Font("Dialog", Font.PLAIN, 30));
         updatePastLapTimes();
-        pastLapTimes.addMouseListener(lapTimeMouseAdapter);
+        pastLapTimes.addMouseListener(new MouseAdapter() {
+            long pressedTime;
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                pressedTime = System.currentTimeMillis();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (System.currentTimeMillis() - pressedTime < 1000) {
+                    if (!timing) {
+                        startLapTimer();
+                    } else {
+                        lapTimeData.addLapTime(getElapsedLapTime());
+                        lapStart = System.currentTimeMillis();
+                        Utils.saveLapTimes(lapTimeData);
+                    }
+                } else {
+                    // Clear lap times
+                    lapTimeData = new LapTimeData();
+                    Utils.saveLapTimes(lapTimeData);
+                    timing = false;
+                }
+                updatePastLapTimes();
+            }
+        });
         add(pastLapTimes, 1);
     }
 
@@ -180,7 +184,7 @@ public class MainPanel extends JLayeredPane {
     }
 
     private void updatePastLapTimes() {
-        pastLapTimes.setText(lapTimeData.isEmpty() ? "No lap times" : lapTimeData.toFormattedString(7));
+        pastLapTimes.setText(lapTimeData.toFormattedString(6));
     }
 
     private long getElapsedLapTime() {

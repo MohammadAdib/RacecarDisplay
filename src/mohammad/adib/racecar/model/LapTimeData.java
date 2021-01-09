@@ -44,11 +44,13 @@ public class LapTimeData {
 
     public String toFormattedString(int lastN) {
         StringBuilder data = new StringBuilder();
+        int fillers = 0;
         if (lastN > lapTimes.size()) {
+            fillers = lastN - lapTimes.size();
             lastN = lapTimes.size();
         }
         data.append("<html>");
-        for (int i = lapTimes.size() - lastN; i < lapTimes.size(); i++) {
+        for (int i = lapTimes.size() - 1; i >= lapTimes.size() - lastN; i--) {
             data.append(getFormattedLapTime(lapTimes.get(i)));
             if (i > 0) {
                 long delta = lapTimes.get(i) - lapTimes.get(i - 1);
@@ -60,6 +62,9 @@ public class LapTimeData {
                 data.append("</font>");
             }
             data.append("<br>");
+        }
+        for(int i = 0; i < fillers; i++) {
+            data.append("00:00.000<br>");
         }
         data.append("</html>");
         return data.toString().trim();
