@@ -22,15 +22,8 @@ public class Utils {
     private static final String CALIBRATION_FILE_NAME = "calibration.json";
     private static final String LAP_TIMES_FILE_NAME = "laptimes.txt";
 
-    private static String getComputerName() {
-        Map<String, String> env = System.getenv();
-        if (env.containsKey("COMPUTERNAME"))
-            return env.get("COMPUTERNAME");
-        else return env.getOrDefault("HOSTNAME", "Unknown Computer");
-    }
-
     public static boolean isInDevMode() {
-        return !getComputerName().contains("pi");
+        return !System.getProperty("user.home").contains("/pi");
     }
 
     private static String getPathToCalibration() {

@@ -32,6 +32,8 @@ public class MainPanel extends JLayeredPane {
         if (!Utils.isCalibrated()) {
             startCalibration();
         } else {
+            getGraphics().setColor(Color.BLACK);
+            getGraphics().fillRect(0, 0, getWidth(), getHeight());
             loadData();
             setupGear();
             setupLapTimes();
@@ -66,7 +68,7 @@ public class MainPanel extends JLayeredPane {
             removeAll();
             init();
         });
-        add(calibrationPanel, 1);
+        add(calibrationPanel, 5);
     }
 
     private void listenForData() {
